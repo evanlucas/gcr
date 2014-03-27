@@ -4,7 +4,7 @@
   "description": "A node gitlab-ci-runner",
   "main": "./lib/gcr.js",
   "bin": {
-    "gcr": "cmd.js"
+    "gcr": "./bin/cmd.js"
   },
   "dependencies": {
     "argsplit": "~0.0.1",
