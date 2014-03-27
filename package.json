@@ -1,0 +1,40 @@
+{
+  "name": "gcr",
+  "version": "0.0.0",
+  "description": "A node gitlab-ci-runner",
+  "main": "./lib/gcr.js",
+  "bin": {
+    "gcr": "cmd.js"
+  },
+  "dependencies": {
+    "argsplit": "~0.0.1",
+    "inquirer": "^0.4.1",
+    "mkdirp": "^0.3.5",
+    "nconf": "~0.6.9",
+    "nopt": "~2.2.0",
+    "npmlog": "~0.0.6",
+    "request": "~2.34.0",
+    "rimraf": "^2.2.6",
+    "slide": "~1.1.5",
+    "which": "^1.0.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/evanlucas/gcr.git"
+  },
+  "keywords": [
+    "gitlab",
+    "ci",
+    "runner"
+  ],
+  "author": "Evan Lucas <evanlucas@me.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/evanlucas/gcr/issues"
+  },
+  "homepage": "https://github.com/evanlucas/gcr"
+}
