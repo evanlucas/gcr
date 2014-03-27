@@ -67,7 +67,7 @@ var tokenQuestion = {
         } else {
           gcr.config.set('token', token)
           gcr.config.save(function(err) {
-            done()
+            done(true)
           })
         }
       })
