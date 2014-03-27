@@ -55,7 +55,7 @@ var tokenQuestion = {
     var done = this.async()
     if (!input) return done('Registration token is required')
     var fp = gcr.key
-    fs.readFile(input, 'utf8', function(err, content) {
+    fs.readFile(fp, 'utf8', function(err, content) {
       if (err) {
         log.error('[readFile]', 'error reading public key', err)
         process.exit(1)
