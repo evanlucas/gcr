@@ -7,6 +7,7 @@ log.pause()
 var gcr = require('../lib/gcr')
   , nopt = require('nopt')
   , path = require('path')
+  , fs = require('fs')
   , inquirer = require('inquirer')
   , knownOpts = { loglevel: ['verbose', 'info', 'warn', 'error', 'silly']
                 , url: String
