@@ -30,6 +30,7 @@ gcr
      -t, --token <token>         Set Registration Token
      -T, --timeout <number>      Set the timeout in milliseconds
      -b, --buildDir <dir>        Set the builds directory
+     -s, --strictSSL             Strict SSL
 ```
 
 ## Why?
