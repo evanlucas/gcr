@@ -8,7 +8,7 @@ var gcr = require('../lib/gcr')
   , nopt = require('nopt')
   , path = require('path')
   , inquirer = require('inquirer')
-  , knownOpts = { loglevel: ['verbose', 'info', 'warn', 'error']
+  , knownOpts = { loglevel: ['verbose', 'info', 'warn', 'error', 'silly']
                 , url: String
                 , token: String
                 , help: Boolean
