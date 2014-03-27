@@ -9,6 +9,7 @@ var gcr = require('../lib/gcr')
   , path = require('path')
   , fs = require('fs')
   , inquirer = require('inquirer')
+  , url = require('url')
   , knownOpts = { loglevel: ['verbose', 'info', 'warn', 'error', 'silly']
                 , url: String
                 , token: String
@@ -45,7 +46,12 @@ var urlQuestion = {
   , name: 'url'
   , message: 'Please enter your GitLab CI url'
   , validate: function(input) {
-    return input && 'string' === typeof input
+    var u = url.parse(input)
+    var valid = u.protocol && u.host && u.href
+    if (valid) {
+      gcr.config.set('url', valid)
+    }
+    return valid && true
   }
 }
 
@@ -98,7 +104,6 @@ gcr.load(parsed, function(err) {
 
   if (questions.length) {
     inquirer.prompt(questions, function(answers) {
-      needsUrl && gcr.config.set('url', answers.url)
       gcr.runner.start()
     })
   } else {
