@@ -17,6 +17,7 @@ var gcr = require('../lib/gcr')
                 , version: Boolean
                 , buildDir: path
                 , strictSSL: Boolean
+                , timeout: Number
                 }
   , shortHand = { verbose: ['--loglevel', 'verbose']
                 , h: ['--help']
@@ -25,6 +26,7 @@ var gcr = require('../lib/gcr')
                 , v: ['--version']
                 , b: ['--buildDir']
                 , s: ['--strictSSL']
+                , T: ['--timeout']
                 }
   , parsed = nopt(knownOpts, shortHand)
 
