@@ -31,6 +31,7 @@ gcr
      -T, --timeout <number>      Set the timeout in milliseconds
      -b, --buildDir <dir>        Set the builds directory
      -s, --strictSSL             Strict SSL
+     -n, --npm                   Run npm install/test if no commands are present
 ```
 
 ## Why?
