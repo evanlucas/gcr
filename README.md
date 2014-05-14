@@ -19,7 +19,7 @@ gcr
 
    Usage:
 
-     gcr [command] [options]
+     gcr [options]
 
    Options:
 
