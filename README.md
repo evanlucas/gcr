@@ -28,7 +28,7 @@ gcr
      -v, --version               Show version
      -u, --url <url>             Set CI Server URL
      -t, --token <token>         Set Registration Token
-     -T, --timeout <number>      Set the timeout in milliseconds
+     -T, --timeout <number>      Set the timeout in seconds
      -b, --buildDir <dir>        Set the builds directory
      -s, --strictSSL             Strict SSL
      -n, --npm                   Run npm install/test if no commands are present
