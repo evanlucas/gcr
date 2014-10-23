@@ -50,7 +50,7 @@ Thanks to the [GitLab](http://gitlab.org) team for all of their effort on GitLab
 
 On launch, if a rsa key does not exist (named `gcr.pub`), then one will automatically be created.  `gcr` will then ask for your GitLab CI Coordinator URL as well as your Registration Token.  The directory in which projects are built defaults to `/tmp/builds`.  If you would like to change that, then simply run `gcr --buildDir <dir>` and that will be saved.
 
-gcr remebers your config by adding a json file `~/.config/gcr.js`
+gcr remembers your config by adding a json file to `~/.config/gcr.js`
 
 ## Forever
 
