@@ -52,11 +52,3 @@ On launch, if a rsa key does not exist (named `gcr.pub`), then one will automati
 
 gcr remembers your config by adding a json file to `~/.config/gcr.js`
 
-## Forever
-
-use [forever](https://www.npmjs.org/package/forever) no never stop running
-
-	sudo npm install -g forever
-	git clone https://github.com/evanlucas/gcr && cd gcr
-	forever start ./bin/cmd.js
-
