@@ -35,6 +35,6 @@ describe('gcr', function() {
   it('should allow loading', function(done) {
     gcr.load({
 
-    })
+    }, done)
   })
 })
