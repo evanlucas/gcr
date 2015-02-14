@@ -24,7 +24,8 @@
     "should": "~4.6.5"
   },
   "scripts": {
-    "test": "mocha -R spec"
+    "test": "mocha -R spec",
+    "cover": "NODE_ENV=test istanbul cover _mocha -- -R spec"
   },
   "repository": {
     "type": "git",
