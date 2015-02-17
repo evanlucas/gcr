@@ -226,7 +226,23 @@ describe('gcr', function() {
   })
 
   describe('runner', function() {
+    it('should have properties', function() {
+      gcr.runner.should.have.property('builds')
+      gcr.runner.should.have.property('queue')
+      gcr.runner.should.have.property('interval')
+    })
 
+    describe('projectIsRunning', function() {
+      it('should return true if a build exists', function() {
+        gcr.runner.builds = { 1: 1 }
+        gcr.runner.projectIsRunning(1).should.be.true
+      })
+
+      it('should return false if a build does not exist', function() {
+        gcr.runner.builds = {}
+        gcr.runner.projectIsRunning(1).should.be.false
+      })
+    })
   })
 
   describe('utils', function() {
