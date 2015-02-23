@@ -1,6 +1,6 @@
 {
   "name": "gcr",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A node gitlab-ci-runner",
   "main": "./lib/gcr.js",
   "bin": {
@@ -13,7 +13,7 @@
     "nconf": "~0.6.9",
     "nopt": "~2.2.0",
     "npmlog": "~0.0.6",
-    "request": "~2.34.0",
+    "request": "~2.53.0",
     "rimraf": "^2.2.6",
     "slide": "~1.1.5",
     "which": "^1.0.5"
