@@ -1,5 +1,8 @@
 # gcr
 
+[![Build Status](https://travis-ci.org/evanlucas/gcr.svg?branch=master)](https://travis-ci.org/evanlucas/gcr)
+
+
 *A node [gitlab-ci-runner](https://github.com/gitlabhq/gitlab-ci-runner)*
 
 ## Install
