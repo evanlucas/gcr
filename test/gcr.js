@@ -41,11 +41,6 @@ describe('gcr', function() {
     gcr.should.have.property('help')
   })
 
-  it('should have property key', function() {
-    var kp = path.join(HOME, '.ssh', 'gcr.pub')
-    gcr.key.should.equal(kp)
-  })
-
   it('should have property utils', function() {
     should.exist(gcr.utils)
   })

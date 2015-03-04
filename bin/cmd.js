@@ -18,6 +18,7 @@ var gcr = require('../lib/gcr')
                 , buildDir: path
                 , strictSSL: Boolean
                 , timeout: Number
+                , keypath: path
                 }
   , shortHand = { verbose: ['--loglevel', 'verbose']
                 , h: ['--help']
@@ -27,6 +28,7 @@ var gcr = require('../lib/gcr')
                 , b: ['--buildDir']
                 , s: ['--strictSSL']
                 , T: ['--timeout']
+                , k: ['--keypath']
                 }
   , parsed = nopt(knownOpts, shortHand)
 
@@ -64,7 +66,7 @@ var tokenQuestion = {
   , validate: function(input) {
     var done = this.async()
     if (!input) return done('Registration token is required')
-    var fp = gcr.key
+    var fp = gcr.config.get('keypath')
     fs.readFile(fp, 'utf8', function(err, content) {
       if (err) {
         log.error('[readFile]', 'error reading public key', err)
