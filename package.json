@@ -1,6 +1,6 @@
 {
   "name": "gcr",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "A node gitlab-ci-runner",
   "main": "./lib/gcr.js",
   "bin": {
