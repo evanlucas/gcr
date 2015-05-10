@@ -37,10 +37,6 @@ describe('gcr', function() {
     gcr.version.should.equal(require('../package').version)
   })
 
-  it('should have property help', function() {
-    gcr.should.have.property('help')
-  })
-
   it('should have property utils', function() {
     should.exist(gcr.utils)
   })

@@ -1,0 +1,18 @@
+gcr - a gitlab ci runner
+
+    Usage:
+
+      gcr [options]
+
+    Options:
+
+      -h, --help                  show help and usage
+      -l, --loglevel <level>      set log level
+      -v, --version               show version
+      -u, --url <url>             set ci server url
+      -t, --token <token>         set registration token
+      -T, --timeout <number>      set global test timeout in seconds
+      -b, --buildDir <dir>        set the build directory
+      -s, --strictSSL             enable/disable strict ssl
+      -n, --npm                   run npm install/test if no commands are present
+      -k, --keypath <path>        specify path to rsa key

@@ -7,6 +7,7 @@ log.pause()
 var gcr = require('../lib/gcr')
   , nopt = require('nopt')
   , path = require('path')
+  , help = require('help')(path.join(__dirname, '/usage.txt'))
   , fs = require('fs')
   , inquirer = require('inquirer')
   , url = require('url')
@@ -33,8 +34,7 @@ var gcr = require('../lib/gcr')
   , parsed = nopt(knownOpts, shortHand)
 
 if (parsed.help) {
-  console.log(gcr.help)
-  return
+  return help()
 }
 
 if (parsed.version) {
@@ -114,4 +114,3 @@ gcr.load(parsed, function(err) {
     gcr.runner.start()
   }
 })
-
