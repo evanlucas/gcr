@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "argsplit": "~0.0.1",
-    "help": "~1.0.0",
+    "help": "~2.0.0",
     "inquirer": "~0.4.1",
     "mkdirp": "~0.3.5",
     "nconf": "~0.6.9",
