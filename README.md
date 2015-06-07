@@ -18,23 +18,24 @@ The first time you run `gcr`, just run `gcr` without a token.  It will prompt yo
 ```bash
 $ gcr --help
 
-gcr
+gcr - a gitlab ci runner
 
-   Usage:
+    Usage:
 
-     gcr [options]
+      gcr [options]
 
-   Options:
+    Options:
 
-     -h, --help                  Show help and usage
-     -l, --loglevel <level>      Set log level
-     -v, --version               Show version
-     -u, --url <url>             Set CI Server URL
-     -t, --token <token>         Set Registration Token
-     -T, --timeout <number>      Set the timeout in seconds
-     -b, --buildDir <dir>        Set the builds directory
-     -s, --strictSSL             Strict SSL
-     -n, --npm                   Run npm install/test if no commands are present
+      -h, --help                  show help and usage
+      -l, --loglevel <level>      set log level
+      -v, --version               show version
+      -u, --url <url>             set ci server url
+      -t, --token <token>         set registration token
+      -T, --timeout <number>      set global test timeout in seconds
+      -b, --buildDir <dir>        set the build directory
+      -s, --strictSSL             enable/disable strict ssl
+      -n, --npm                   run npm install/test if no commands are present
+      -k, --keypath <path>        specify path to rsa key
 ```
 
 ## Why?
