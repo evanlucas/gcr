@@ -7,6 +7,8 @@ function handle(req, res) {
   if (req.method === 'PUT') return handlePUT(req, res)
   if (url === '/api/v1/runners/register.json') {
     return handleRegister(req, res)
+  } else if (url === '/ci/api/v1/runners/register.json') {
+    return handleRegister(req, res)
   }
 
   var body = ''

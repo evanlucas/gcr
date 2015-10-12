@@ -44,7 +44,7 @@ describe('gcr', function() {
   it('should allow loading', function(done) {
     gcr.loaded.should.be.false
     gcr.load({
-      url: 'http://127.0.0.1:' + port
+      url: 'http://127.0.0.1:' + port + '/ci'
     , token: 'biscuits'
     , buildDir: '/tmp/gcr-builds'
     , npm: true
