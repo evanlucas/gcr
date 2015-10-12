@@ -150,7 +150,7 @@ describe('gcr', function() {
       should.exist(gcr.client)
     })
 
-    it('apuUrl() should return gcr.config.get(\'url\')', function() {
+    it('apiUrl() should return gcr.config.get(\'url\')', function() {
       gcr.client.apiUrl().should.equal(gcr.config.get('url'))
     })
 
