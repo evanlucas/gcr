@@ -1,2 +1,3 @@
 coverage
 test/home/.config
+node_modules/
