@@ -20,6 +20,8 @@ var gcr = require('../lib/gcr')
                 , strictSSL: Boolean
                 , timeout: Number
                 , keypath: path
+                , shell: path
+                , shellFlag: String
                 }
   , shortHand = { verbose: ['--loglevel', 'verbose']
                 , h: ['--help']
@@ -30,6 +32,8 @@ var gcr = require('../lib/gcr')
                 , s: ['--strictSSL']
                 , T: ['--timeout']
                 , k: ['--keypath']
+                , s: ['--shell']
+                , sf: ['--shellFlag']
                 }
   , parsed = nopt(knownOpts, shortHand)
 

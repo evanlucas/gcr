@@ -74,6 +74,11 @@ describe('gcr', function() {
     gcr.should.have.property('config')
   })
 
+  it('should set the shell options', function(){
+    gcr.config.get('shell').should.exist
+    gcr.config.get('shellFlag').should.exist
+  })
+
   describe('build', function() {
     var Build = require('../lib/build')
     var build
