@@ -18,6 +18,9 @@ describe('gcr', function() {
       port = server.address().port
       done()
     })
+
+    gcr.root = path.join(HOME, '.config')
+    gcr.confFile = path.join(HOME, '.config', 'gcr.json')
   })
 
   it('should be an EventEmitter', function() {
@@ -27,6 +30,11 @@ describe('gcr', function() {
   it('should have property root', function() {
     should.exist(gcr.root)
     gcr.root.should.equal(path.join(HOME, '.config'))
+  })
+
+  it('should have property confFile', function(){
+    should.exist(gcr.confFile)
+    gcr.confFile.should.equal(path.join(HOME, '.config', 'gcr.json'))
   })
 
   it('should have property loaded', function() {
@@ -46,7 +54,7 @@ describe('gcr', function() {
     gcr.load({
       url: 'http://127.0.0.1:' + port + '/ci'
     , token: 'biscuits'
-    , buildDir: '/tmp/gcr-builds'
+    , buildDir: __dirname + '/home/builds'
     , npm: true
     , strictSSL: false
     , timeout: 5000
@@ -89,7 +97,7 @@ describe('gcr', function() {
       build.should.have.property('opts')
       build.should.have.property('output')
       build.should.have.property('projectDir')
-      build.projectDir.should.equal('/tmp/gcr-builds/project-1')
+      build.projectDir.should.equal(__dirname + '/home/builds/project-1'.replace(/\//g, path.sep))
       build.should.have.property('state', 'waiting')
     })
 
