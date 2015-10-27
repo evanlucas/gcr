@@ -225,12 +225,12 @@ describe('gcr', function() {
 
     describe('projectIsRunning', function() {
       it('should return true if a build exists', function() {
-        gcr.runner.builds = { 1: 1 }
+        gcr.runner.builds = new Map([[1, 1]])
         gcr.runner.projectIsRunning(1).should.be.true
       })
 
       it('should return false if a build does not exist', function() {
-        gcr.runner.builds = {}
+        gcr.runner.builds = new Map()
         gcr.runner.projectIsRunning(1).should.be.false
       })
     })
