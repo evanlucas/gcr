@@ -5,6 +5,9 @@
 
 *A node [gitlab-ci-runner](https://github.com/gitlabhq/gitlab-ci-runner)*
 
+`gcr` v4.x will only support node v4.x+. To use `gcr` with an older version
+of node, please use `gcr` v3.x
+
 ## Install
 
 ```bash
