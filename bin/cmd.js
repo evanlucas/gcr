@@ -87,6 +87,8 @@ var tokenQuestion = {
   }
 }
 
+process.on('SIGTERM', process.exit)
+
 gcr.load(parsed, function(err) {
   if (err) {
     var t = err.heading || ''
