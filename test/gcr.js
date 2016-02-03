@@ -1,3 +1,5 @@
+'use strict'
+
 var path = require('path')
 var HOME = path.join(__dirname, 'home')
 process.env.HOME = HOME
@@ -99,11 +101,6 @@ describe('gcr', function() {
       sandbox.stub(build, 'update', function(cb) {
         cb && cb()
       })
-      var count = 0
-      function next() {
-        count++
-        if (count === 2) done()
-      }
       build.on('done', function(success) {
         success.should.be.true
         sandbox.restore()
@@ -130,11 +127,6 @@ describe('gcr', function() {
       sandbox.stub(gcr.client, 'updateBuild', function(id, s, o, cb) {
         cb && cb()
       })
-      var count = 0
-      function next() {
-        count++
-        if (count === 2) done()
-      }
       build2.on('done', function(success) {
         success.should.be.true
         sandbox.restore()

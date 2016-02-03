@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+'use strict'
+
 process.title = 'gcr'
 var log = require('npmlog')
 log.pause()
@@ -42,9 +44,6 @@ if (parsed.version) {
   return
 }
 
-var needsUrl = false
-  , needsRegToken = false
-
 var urlQuestion = {
     type: 'input'
   , name: 'url'
@@ -72,13 +71,14 @@ var tokenQuestion = {
         log.error('[readFile]', 'error reading public key', err)
         process.exit(1)
       }
-      gcr.client.registerRunner(content, input, function(err, token){
+      gcr.client.registerRunner(content, input, function(err, token) {
         if (err) {
           log.error('[register]', 'error registering', err)
           process.exit(1)
         } else {
           gcr.config.set('token', token)
           gcr.config.save(function(err) {
+            if (err) throw err
             done(true)
           })
         }
