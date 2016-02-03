@@ -1,0 +1,38 @@
+{
+  "env": {
+    "node": true,
+    "browser": true,
+    "commonjs": true,
+    "es6": true
+  },
+  "ecmaFeatures": {
+    "arrowFunctions": true,
+    "blockBindings": true,
+    "forOf": true,
+    "objectLiteralComputedProperties": true,
+    "objectLiteralShorthandProperties": true,
+    "templateStrings": true,
+    "globalReturn": true
+  },
+  "rules": {
+    "quotes": [2, "single"],
+    "semi": [2, "never"],
+    "comma-style": [2, "first"],
+    "no-unused-vars": [2, { "vars": "all", "args": "none" }],
+    "comma-dangle": [2, "never"],
+    "dot-notation": [2],
+    "eqeqeq": [2, "allow-null"],
+    "strict": [2, "global"],
+    "handle-callback-err": [2, "^(err|er)$"],
+    "eol-last": [2],
+    "quotes": [2, "single"],
+    "space-after-keywords": [2, "always"],
+    "space-before-blocks": [2, "always"],
+    "space-before-function-paren": [2, "never"],
+    "space-before-keywords": [2, "always"],
+    "space-in-parens": [2, "never"],
+    "arrow-body-style": [2, "always"],
+    "arrow-parens": [2, "always"],
+    "arrow-spacing": [2]
+  }
+}
