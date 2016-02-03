@@ -1,234 +1,201 @@
 'use strict'
 
-var path = require('path')
-var HOME = path.join(__dirname, 'home')
+const test = require('tap').test
+const path = require('path')
+const HOME = path.join(__dirname, 'home')
 process.env.HOME = HOME
 
-var should = require('should')
-  , gcr = require('../')
-  , rimraf = require('rimraf')
-  , sinon = require('sinon')
+const gcr = require('../')
+const rimraf = require('rimraf')
+const EE = require('events')
+const Build = require('../lib/build')
+const Client = require('../lib/client')
+const Runner = require('../lib/runner')
 
-describe('gcr', function() {
-  var server, port
-  before(function(done) {
-    rimraf.sync(__dirname + '/home/.config/gcr.json')
-    rimraf.sync(__dirname + '/home/builds')
-    server = require('./fixtures/server')
-    server.listen(0, function(err) {
-      if (err) return done(err)
-      port = server.address().port
-      done()
+let server, port
+
+test('setup', (t) => {
+  rimraf.sync(__dirname + '/home/.config/gcr.json')
+  rimraf.sync(__dirname + '/home/builds')
+  server = require('./fixtures/server')
+  server.listen(0, (err) => {
+    if (err) {
+      return t.bailout('Could not start mock server')
+    }
+
+    port = server.address().port
+    t.end()
+  })
+})
+
+test('gcr', (t) => {
+  t.type(gcr, EE)
+  t.equal(gcr.root, path.join(HOME, '.config'), 'gcr.root is correct')
+  t.equal(gcr.loaded, false, 'gcr.loaded is false')
+  t.equal(gcr.version, require('../package').version, 'gcr.version is correct')
+  t.ok(gcr.hasOwnProperty('utils'), 'hasOwnProperty(utils)')
+  t.notOk(gcr.config, 'config is null before load')
+  t.end()
+})
+
+test('load', (t) => {
+  gcr.load({
+    url: `http://127.0.0.1:${port}/ci`
+  , token: 'biscuits'
+  , buildDir: '/tmp/gcr-builds'
+  , npm: true
+  , strictSSL: false
+  , timeout: 5000
+  , loglevel: 'silent'
+  }, (err) => {
+    t.ifError(err, 'err should not exist')
+    t.equal(gcr.loaded, true, 'gcr.loaded === true')
+    t.ok(gcr.hasOwnProperty('config'), 'gcr.config')
+
+    gcr.load((err) => {
+      t.ifError(err, 'err should not exist')
+      t.end()
     })
   })
+})
 
-  it('should be an EventEmitter', function() {
-    gcr.should.be.instanceOf(require('events').EventEmitter)
+test('build and run with clone', (t) => {
+  t.plan(11)
+  const build = Build({
+    commands: ['npm test']
+  , timeout: 5000
+  , project_id: 1
+  , repo_url: 'git://github.com/evanlucas/gcr-test.git'
+  , ref: 'origin/master'
+  , allow_git_fetch: true
+  , before_sha: 'blah'
+  , ref_name: 'master'
+  , id: 1
   })
 
-  it('should have property root', function() {
-    should.exist(gcr.root)
-    gcr.root.should.equal(path.join(HOME, '.config'))
+  t.type(build, EE)
+  t.equal(build.git, gcr.config.get('git'), 'git is correct')
+  t.equal(build.buildDir, gcr.config.get('buildDir'), 'buildDir is correct')
+  t.ok(build.hasOwnProperty('opts'), 'hasOwnProperty(opts)')
+  t.ok(build.hasOwnProperty('output'), 'hasOwnProperty(output)')
+  t.ok(build.hasOwnProperty('projectDir'), 'hasOwnProperty(projectDir)')
+  t.equal(build.projectDir, '/tmp/gcr-builds/project-1')
+  t.equal(build.state, 'waiting')
+
+  const orig = build.update
+  build.update = function(cb) {
+    build.update = orig
+    t.pass('called update')
+    cb && cb()
+  }
+
+  build.on('done', (success) => {
+    t.equal(success, true, 'success is correct')
   })
 
-  it('should have property loaded', function() {
-    gcr.loaded.should.be.false
+  build.run()
+  t.equal(build.state, 'running', 'build.state === running')
+})
+
+test('build and run with fetch', (t) => {
+  t.plan(11)
+  const build = Build({
+    commands: ['npm test']
+  , timeout: 5000
+  , project_id: 2
+  , repo_url: 'git://github.com/evanlucas/gcr-test.git'
+  , ref: 'origin/master'
+  , allow_git_fetch: false
+  , before_sha: 'blah'
+  , ref_name: 'master'
+  , id: 2
   })
 
-  it('should have property version', function() {
-    gcr.version.should.equal(require('../package').version)
+  t.type(build, EE)
+  t.equal(build.git, gcr.config.get('git'), 'git is correct')
+  t.equal(build.buildDir, gcr.config.get('buildDir'), 'buildDir is correct')
+  t.ok(build.hasOwnProperty('opts'), 'hasOwnProperty(opts)')
+  t.ok(build.hasOwnProperty('output'), 'hasOwnProperty(output)')
+  t.ok(build.hasOwnProperty('projectDir'), 'hasOwnProperty(projectDir)')
+  t.equal(build.projectDir, '/tmp/gcr-builds/project-2')
+  t.equal(build.state, 'waiting')
+
+  const updateOrig = gcr.client.updateBuild
+  gcr.client.updateBuild = function(id, s, o, cb) {
+    gcr.client.updateBuild = updateOrig
+    t.pass('called client.updateBuild')
+    cb && cb()
+  }
+
+  build.on('done', (success) => {
+    t.equal(success, true, 'success is correct')
   })
 
-  it('should have property utils', function() {
-    should.exist(gcr.utils)
+  build.run()
+  t.equal(build.state, 'running', 'build.state === running')
+})
+
+test('client', (t) => {
+  t.plan(15)
+  t.type(gcr.client, Client)
+  t.equal(gcr.client.apiUrl(), gcr.config.get('url'), 'gcr.url is correct')
+
+  gcr.client.updateBuild(1, 'running', 'blah', (err, out) => {
+    t.ifError(err, 'err should not exist')
+    t.equal(out, true, 'out is true')
   })
 
-  it('should allow loading', function(done) {
-    gcr.loaded.should.be.false
-    gcr.load({
-      url: 'http://127.0.0.1:' + port + '/ci'
-    , token: 'biscuits'
-    , buildDir: '/tmp/gcr-builds'
-    , npm: true
-    , strictSSL: false
-    , timeout: 5000
-    , loglevel: 'silent'
-    }, function(err) {
-      if (err) return done(err)
-      gcr.loaded.should.be.true
-      done()
-    })
+  gcr.client.updateBuild(1, 'running', 'blah2', (err, out) => {
+    t.ifError(err, 'err should not exist')
+    t.equal(out, false, 'out is false')
   })
 
-  it('should allow passing just a callback to load', function(done) {
-    gcr.load(done)
+  gcr.client.registerRunner(1, 'biscuits', (err, out) => {
+    t.ifError(err, 'err should not exist')
+    t.equal(out, 'biscuits', 'out is correct')
   })
 
-  it('gcr.config should exist after loading', function() {
-    gcr.should.have.property('config')
+  gcr.client.registerRunner(1, 'blah', (err, out) => {
+    t.type(err, Error)
+    t.match(err.message, /Invalid response/)
   })
 
-  describe('build', function() {
-    var Build = require('../lib/build')
-    var build
-
-    it('should allow construction', function() {
-      build = Build({
-        commands: ['npm test']
-      , timeout: 5000
-      , project_id: 1
-      , repo_url: 'git://github.com/evanlucas/gcr-test.git'
-      , ref: 'origin/master'
-      , allow_git_fetch: true
-      , before_sha: 'blah'
-      , ref_name: 'master'
-      , id: 1
-      })
-
-      build.should.be.instanceOf(require('events').EventEmitter)
-      build.should.have.property('git', gcr.config.get('git'))
-      build.should.have.property('buildDir', gcr.config.get('buildDir'))
-      build.should.have.property('opts')
-      build.should.have.property('output')
-      build.should.have.property('projectDir')
-      build.projectDir.should.equal('/tmp/gcr-builds/project-1')
-      build.should.have.property('state', 'waiting')
-    })
-
-    it('should run with clone', function(done) {
-      this.timeout(10000)
-      var sandbox = sinon.sandbox.create()
-      sandbox.stub(build, 'update', function(cb) {
-        cb && cb()
-      })
-      build.on('done', function(success) {
-        success.should.be.true
-        sandbox.restore()
-        done()
-      })
-      build.run()
-      build.state.should.equal('running')
-    })
-
-    it('should run with fetch', function(done) {
-      var build2 = Build({
-        commands: ['npm test']
-      , timeout: 5000
-      , project_id: 2
-      , repo_url: 'git://github.com/evanlucas/gcr-test.git'
-      , ref: 'origin/master'
-      , allow_git_fetch: false
-      , before_sha: 'blah'
-      , ref_name: 'master'
-      , id: 2
-      })
-      this.timeout(10000)
-      var sandbox = sinon.sandbox.create()
-      sandbox.stub(gcr.client, 'updateBuild', function(id, s, o, cb) {
-        cb && cb()
-      })
-      build2.on('done', function(success) {
-        success.should.be.true
-        sandbox.restore()
-        done()
-      })
-      build2.run()
-      build2.state.should.equal('running')
-    })
-  })
-
-  describe('client', function() {
-    it('should be accessible via gcr.client', function() {
-      should.exist(gcr.client)
-    })
-
-    it('apiUrl() should return gcr.config.get(\'url\')', function() {
-      gcr.client.apiUrl().should.equal(gcr.config.get('url'))
-    })
-
-    describe('updateBuild', function() {
-      it('should return null, true on success', function(done) {
-        gcr.client.updateBuild(1, 'running', 'blah', function(err, out) {
-          if (err) return done(err)
-          out.should.be.true
-          done()
-        })
-      })
-
-      it('should return null, false on error', function(done) {
-        gcr.client.updateBuild(1, 'running', 'blah2', function(err, out) {
-          if (err) return done(err)
-          out.should.be.false
-          done()
-        })
-      })
-    })
-
-    describe('registerRunner', function() {
-      it('should return null, token on success', function(done) {
-        gcr.client.registerRunner(1, 'biscuits', function(err, out) {
-          if (err) return done(err)
-          should.exist(out)
-          done()
-        })
-      })
-
-      it('should return err on error', function(done) {
-        gcr.client.registerRunner(1, 'blah', function(err, out) {
-          should.exist(err)
-          err.should.match(/Invalid response/)
-          done()
-        })
-      })
-    })
-
-    describe('getBuild', function() {
-      it('should return null, object on success', function(done) {
-        gcr.config.set('token', 'biscuits')
-        gcr.client.getBuild(done)
-      })
-
-      it('should return err on 403', function(done) {
-        gcr.config.set('token', 'blah')
-        gcr.client.getBuild(function(err, out) {
-          should.exist(err)
-          err.should.match(/Unable to get builds/)
-          done()
-        })
-      })
-
-      it('should return undefined on anything else', function(done) {
-        gcr.config.set('token', 'baaaaa')
-        gcr.client.getBuild(function(err, out) {
-          if (err) return done(err)
-          should.not.exist(out)
-          done()
-        })
+  gcr.config.set('token', 'biscuits')
+  gcr.client.getBuild((err) => {
+    t.ifError(err, 'err should not exist')
+    gcr.config.set('token', 'blah')
+    gcr.client.getBuild((err, out) => {
+      t.type(err, Error)
+      t.match(err.message, /Unable to get builds/)
+      gcr.config.set('token', 'baaaaa')
+      gcr.client.getBuild((err, out) => {
+        t.ifError(err, 'err should not exist')
+        t.notOk(out)
       })
     })
   })
+})
 
-  describe('runner', function() {
-    it('should have properties', function() {
-      gcr.runner.should.have.property('builds')
-      gcr.runner.should.have.property('queue')
-      gcr.runner.should.have.property('interval')
-    })
+test('runner', (t) => {
+  t.type(gcr.runner, Runner)
+  t.ok(gcr.runner.hasOwnProperty('builds'), 'hasOwnProperty(builds)')
+  t.ok(gcr.runner.hasOwnProperty('queue'), 'hasOwnProperty(queue)')
+  t.ok(gcr.runner.hasOwnProperty('interval'), 'hasOwnProperty(interval)')
 
-    describe('projectIsRunning', function() {
-      it('should return true if a build exists', function() {
-        gcr.runner.builds = new Map([[1, 1]])
-        gcr.runner.projectIsRunning(1).should.be.true
-      })
+  gcr.runner.builds = new Map([[1, 1]])
+  t.equal(gcr.runner.projectIsRunning(1), true, 'project 1 is running')
 
-      it('should return false if a build does not exist', function() {
-        gcr.runner.builds = new Map()
-        gcr.runner.projectIsRunning(1).should.be.false
-      })
-    })
-  })
+  gcr.runner.builds = new Map()
+  t.equal(gcr.runner.projectIsRunning(1), false, 'project 1 is not running')
 
-  describe('utils', function() {
+  t.end()
+})
 
+test('cleanup', (t) => {
+  rimraf.sync(__dirname + '/home/.config/gcr.json')
+  rimraf.sync(__dirname + '/home/builds')
+  server.close((err) => {
+    if (err) throw err
+    t.end()
   })
 })
