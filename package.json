@@ -22,11 +22,12 @@
     "which": "~1.0.5"
   },
   "devDependencies": {
-    "eslint": "~1.10.3",
+    "lintit": "~1.0.1",
     "tap": "~5.4.2"
   },
   "scripts": {
-    "lint": "eslint *.js lib/**.js bin/**.js test/**.js",
+    "lint": "lintit",
+    "pretest": "npm run lint",
     "test": "tap test/*.js --cov"
   },
   "repository": {
