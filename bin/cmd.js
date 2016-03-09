@@ -100,12 +100,10 @@ gcr.load(parsed, function(err) {
 
   if (!gcr.config.get('url')) {
     questions.push(urlQuestion)
-    needsUrl = true
   }
 
   if (!gcr.config.get('token')) {
     questions.push(tokenQuestion)
-    needsRegToken = true
   }
 
   if (questions.length) {
