@@ -41,6 +41,12 @@ gcr - a gitlab ci runner
       -k, --keypath <path>        specify path to rsa key
 ```
 
+## Execution Notes
+
+On launch, if a rsa key does not exist (named `gcr.pub`), then one will automatically be created.  `gcr` will then ask for your GitLab CI Coordinator URL as well as your Registration Token.  The directory in which projects are built defaults to `/tmp/builds`.  If you would like to change that, then simply run `gcr --buildDir <dir>` and that will be saved.
+
+gcr remembers your config by adding a json file to `~/.config/gcr.js`
+
 ## Why?
 
 I wanted something that was really easy to install (`npm install -g gcr`)
@@ -53,8 +59,26 @@ MIT (See `LICENSE` for more info)
 
 Thanks to the [GitLab](http://gitlab.org) team for all of their effort on GitLab/GitLab CI.
 
-## Notes
+# gcr is an [OPEN Open Source Project](http://openopensource.org/)
 
-On launch, if a rsa key does not exist (named `gcr.pub`), then one will automatically be created.  `gcr` will then ask for your GitLab CI Coordinator URL as well as your Registration Token.  The directory in which projects are built defaults to `/tmp/builds`.  If you would like to change that, then simply run `gcr --buildDir <dir>` and that will be saved.
+-----------------------------------------
 
-gcr remembers your config by adding a json file to `~/.config/gcr.js`
+## What?
+
+Individuals making significant and valuable contributions are given
+commit-access to the project to contribute as they see fit. This project
+is more like an open wiki than a standard guarded open source project.
+
+## Rules
+
+There are a few basic ground-rules for contributors:
+
+1. **No `--force` pushes** or modifying the Git history in any way.
+1. **Non-master branches** ought to be used for ongoing work.
+1. **External API changes and significant modifications** ought to be subject to an **internal pull-request** to solicit feedback from other contributors.
+1. Internal pull-requests to solicit feedback are *encouraged* for any other non-trivial contribution but left to the discretion of the contributor.
+1. Contributors should attempt to adhere to the prevailing code-style.
+
+## Releases
+
+Declaring formal releases remains the prerogative of the project maintainer.
