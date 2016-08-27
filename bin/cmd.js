@@ -40,7 +40,7 @@ if (parsed.help) {
 }
 
 if (parsed.version) {
-  console.log('gcr', 'v'+gcr.version)
+  console.log('gcr', 'v' + gcr.version)
   return
 }
 
