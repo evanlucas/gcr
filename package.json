@@ -19,7 +19,8 @@
     "rimraf": "~2.2.6",
     "slide": "~1.1.5",
     "url-join": "0.0.1",
-    "which": "~1.0.5"
+    "which": "~1.0.5",
+    "split-ca": "~1.0.1"
   },
   "devDependencies": {
     "lintit": "~1.0.1",
