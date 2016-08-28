@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - changelog
+- Ability to connect to two-way SSL enabled GitLab
 
 ### Changed
 - Minimum Node.js version updated to 4.x
