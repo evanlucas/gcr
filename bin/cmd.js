@@ -25,6 +25,7 @@ var gcr = require('../lib/gcr')
                 , sslcert: path
                 , sslkey: path
                 , cacert: path
+        		    , registerToken: String
                 }
   , shortHand = { verbose: ['--loglevel', 'verbose']
                 , h: ['--help']
@@ -38,6 +39,7 @@ var gcr = require('../lib/gcr')
                 , C: ['--sslcert']
                 , K: ['--sslkey']
                 , A: ['--cacert']
+	              , r: ['--registerToken']
                 }
   , parsed = nopt(knownOpts, shortHand)
 
@@ -110,6 +112,31 @@ gcr.load(parsed, function(err) {
 
   if (!gcr.config.get('token')) {
     questions.push(tokenQuestion)
+    if (!gcr.config.get('registerToken')) {
+	questions.push(tokenQuestion)
+    } else {
+	    var fp = gcr.config.get('keypath')
+	    fs.readFile(fp, 'utf8', function(err, content) {
+		if (err) {
+		    log.error('[readFile]', 'error reading public key', err)
+		process.exit(1)
+		}
+		gcr.client.registerRunner(content
+      , gcr.config.get('registerToken')
+      , function(err, token) {
+		    if (err) {
+			log.error('[register]', 'error registering', err)
+		    process.exit(1)
+		    } else {
+			gcr.config.set('token', token)
+		    gcr.config.save(function(err) {
+          if (err) throw err
+        })
+		    }
+		})
+	    })
+    }
+        needsRegToken = true
   }
 
   if (questions.length) {
