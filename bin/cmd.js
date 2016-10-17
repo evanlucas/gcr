@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+'use strict'
+
 process.title = 'gcr'
 var log = require('npmlog')
 log.pause()
@@ -22,6 +24,9 @@ var gcr = require('../lib/gcr')
                 , keypath: path
                 , shell: path
                 , shellFlag: String
+                , sslcert: path
+                , sslkey: path
+                , cacert: path
                 }
   , shortHand = { verbose: ['--loglevel', 'verbose']
                 , h: ['--help']
@@ -34,6 +39,9 @@ var gcr = require('../lib/gcr')
                 , k: ['--keypath']
                 , s: ['--shell']
                 , sf: ['--shellFlag']
+                , C: ['--sslcert']
+                , K: ['--sslkey']
+                , A: ['--cacert']
                 }
   , parsed = nopt(knownOpts, shortHand)
 
@@ -42,12 +50,9 @@ if (parsed.help) {
 }
 
 if (parsed.version) {
-  console.log('gcr', 'v'+gcr.version)
+  console.log('gcr', 'v' + gcr.version)
   return
 }
-
-var needsUrl = false
-  , needsRegToken = false
 
 var urlQuestion = {
     type: 'input'
@@ -76,13 +81,14 @@ var tokenQuestion = {
         log.error('[readFile]', 'error reading public key', err)
         process.exit(1)
       }
-      gcr.client.registerRunner(content, input, function(err, token){
+      gcr.client.registerRunner(content, input, function(err, token) {
         if (err) {
           log.error('[register]', 'error registering', err)
           process.exit(1)
         } else {
           gcr.config.set('token', token)
           gcr.config.save(function(err) {
+            if (err) throw err
             done(true)
           })
         }
@@ -90,6 +96,8 @@ var tokenQuestion = {
     })
   }
 }
+
+process.on('SIGTERM', process.exit)
 
 gcr.load(parsed, function(err) {
   if (err) {
@@ -102,12 +110,10 @@ gcr.load(parsed, function(err) {
 
   if (!gcr.config.get('url')) {
     questions.push(urlQuestion)
-    needsUrl = true
   }
 
   if (!gcr.config.get('token')) {
     questions.push(tokenQuestion)
-    needsRegToken = true
   }
 
   if (questions.length) {

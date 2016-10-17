@@ -19,17 +19,17 @@
     "rimraf": "~2.2.6",
     "slide": "~1.1.5",
     "url-join": "0.0.1",
-    "which": "~1.0.5"
+    "which": "~1.0.5",
+    "split-ca": "~1.0.1"
   },
   "devDependencies": {
-    "istanbul": "~0.3.5",
-    "mocha": "~2.1.0",
-    "should": "~4.6.5",
-    "sinon": "~1.12.2"
+    "lintit": "~1.0.1",
+    "tap": "~5.4.2"
   },
   "scripts": {
-    "test": "mocha -R spec",
-    "cover": "NODE_ENV=test istanbul cover _mocha -- -R spec"
+    "lint": "lintit",
+    "pretest": "npm run lint",
+    "test": "tap test/*.js --cov"
   },
   "repository": {
     "type": "git",
