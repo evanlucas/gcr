@@ -64,8 +64,8 @@ test('load', (t) => {
 test('shell selection', (t) => {
   t.plan(2)
   t.match(gcr.config.get('shell')
-    , /cmd\.exe$|\/sh$/
-    , 'Shell is either cmd.exe or /bin/sh'
+    , /cmd\.exe$|\/bash$/
+    , 'Shell is either cmd.exe or /bin/bash'
   )
 
   t.match(gcr.config.get('shellFlag')
