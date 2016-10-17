@@ -22,6 +22,8 @@ var gcr = require('../lib/gcr')
                 , strictSSL: Boolean
                 , timeout: Number
                 , keypath: path
+                , shell: path
+                , shellFlag: String
                 , sslcert: path
                 , sslkey: path
                 , cacert: path
@@ -35,6 +37,8 @@ var gcr = require('../lib/gcr')
                 , s: ['--strictSSL']
                 , T: ['--timeout']
                 , k: ['--keypath']
+                , s: ['--shell']
+                , f: ['--shellFlag']
                 , C: ['--sslcert']
                 , K: ['--sslkey']
                 , A: ['--cacert']

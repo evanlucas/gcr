@@ -39,6 +39,8 @@ gcr - a gitlab ci runner
       -s, --strictSSL             enable/disable strict ssl
       -n, --npm                   run npm install/test if no commands are present
       -k, --keypath <path>        specify path to rsa key
+      -s, --shell <path>          specify path to shell e.g. /bin/bash
+      -sf, --shellFlag <flag>     set the flag to run commands on your shell e.g. -c
       -C, --sslcert <path>        enable/disable strict ssl
       -K, --sslkey <path>         run npm install/test if no commands are present
       -A, --cacert <path>         specify path to rsa key

@@ -29,8 +29,10 @@ test('setup', (t) => {
 })
 
 test('gcr', (t) => {
+  var home = require('os-homedir')()
+
   t.type(gcr, EE)
-  t.equal(gcr.root, path.join(HOME, '.config'), 'gcr.root is correct')
+  t.equal(gcr.root, path.join(home, '.config'), 'gcr.root is correct')
   t.equal(gcr.loaded, false, 'gcr.loaded is false')
   t.equal(gcr.version, require('../package').version, 'gcr.version is correct')
   t.ok(gcr.hasOwnProperty('utils'), 'hasOwnProperty(utils)')
@@ -59,6 +61,19 @@ test('load', (t) => {
   })
 })
 
+test('shell selection', (t) => {
+  t.plan(2)
+  t.match(gcr.config.get('shell')
+    , /cmd\.exe$|\/bash$/
+    , 'Shell is either cmd.exe or /bin/bash'
+  )
+
+  t.match(gcr.config.get('shellFlag')
+    , /[-/][cC]/
+    , 'Shell Flag is either -c or /C'
+  )
+})
+
 test('build and run with clone', (t) => {
   t.plan(11)
   const build = Build({
@@ -79,7 +94,7 @@ test('build and run with clone', (t) => {
   t.ok(build.hasOwnProperty('opts'), 'hasOwnProperty(opts)')
   t.ok(build.hasOwnProperty('output'), 'hasOwnProperty(output)')
   t.ok(build.hasOwnProperty('projectDir'), 'hasOwnProperty(projectDir)')
-  t.equal(build.projectDir, '/tmp/gcr-builds/project-1')
+  t.equal(build.projectDir, path.join('/', 'tmp', 'gcr-builds', 'project-1'))
   t.equal(build.state, 'waiting')
 
   const orig = build.update
@@ -117,7 +132,7 @@ test('build and run with fetch', (t) => {
   t.ok(build.hasOwnProperty('opts'), 'hasOwnProperty(opts)')
   t.ok(build.hasOwnProperty('output'), 'hasOwnProperty(output)')
   t.ok(build.hasOwnProperty('projectDir'), 'hasOwnProperty(projectDir)')
-  t.equal(build.projectDir, '/tmp/gcr-builds/project-2')
+  t.equal(build.projectDir, path.join('/', 'tmp', 'gcr-builds', 'project-2'))
   t.equal(build.state, 'waiting')
 
   const updateOrig = gcr.client.updateBuild
