@@ -38,7 +38,7 @@ var gcr = require('../lib/gcr')
                 , T: ['--timeout']
                 , k: ['--keypath']
                 , s: ['--shell']
-                , sf: ['--shellFlag']
+                , f: ['--shellFlag']
                 , C: ['--sslcert']
                 , K: ['--sslkey']
                 , A: ['--cacert']
